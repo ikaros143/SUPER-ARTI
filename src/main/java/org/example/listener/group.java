@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
 @Component
 public class group {
 
-    @Listener  //新人加群
+    @Listener  //新人加群1
     public void IncreaseEvent(GroupMemberIncreaseEvent event) {
         ID id = event.getAfter().getId();
         At at = new At(id);
