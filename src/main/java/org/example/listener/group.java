@@ -51,7 +51,7 @@ public class group {
         group1.deleteBlocking();
     }
 
-    @Listener
+    @Listener(priority = 400)
     @Filter(value = "你给我退群", targets = @Filter.Targets(atBot = true))
     @ContentTrim
     public EventResult listen(GroupMessageEvent groupMessageEvent, ContinuousSessionContext sessionContext) {

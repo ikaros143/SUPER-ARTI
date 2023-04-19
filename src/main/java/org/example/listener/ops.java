@@ -58,13 +58,7 @@ public class ops {
                         event.getBot().delay(Duration.ofSeconds(2),()->{
                             event.getGroup().sendBlocking(messages);
                         });
-//                        try {
-//                            String a ="https://api.r10086.com/img-api.php?zsy=原神";//图片url
-//                            MessagesBuilder seTu = getSeTu(a);//调用字节流获取图片
-//                            event.getGroup().sendAsync(seTu.build());
-//                        } catch (IOException e) {
-//                            throw new RuntimeException(e);
-//                        }
+
                     }
                     break;
                 }

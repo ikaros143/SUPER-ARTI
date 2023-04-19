@@ -2,44 +2,32 @@ package org.example.mute;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import lombok.SneakyThrows;
 import love.forte.simboot.annotation.ContentTrim;
 import love.forte.simboot.annotation.Filter;
 import love.forte.simboot.annotation.Listener;
-
 import love.forte.simbot.ID;
-import love.forte.simbot.Identifies;
 import love.forte.simbot.action.DeleteSupport;
 import love.forte.simbot.application.Application;
 import love.forte.simbot.application.BotManagers;
-
 import love.forte.simbot.bot.Bot;
-import love.forte.simbot.bot.BotManager;
-import love.forte.simbot.component.mirai.MiraiFriend;
-import love.forte.simbot.component.mirai.MiraiGroup;
-import love.forte.simbot.component.mirai.bot.MiraiBot;
-import love.forte.simbot.component.mirai.bot.MiraiBotManager;
 import love.forte.simbot.component.mirai.event.MiraiGroupMessageEvent;
 import love.forte.simbot.component.mirai.event.MiraiGroupNudgeEvent;
-import love.forte.simbot.component.mirai.message.MiraiAudio;
 import love.forte.simbot.component.mirai.message.MiraiNudge;
-import love.forte.simbot.component.mirai.message.MiraiSendOnlyAudio;
-import love.forte.simbot.definition.*;
-import love.forte.simbot.event.*;
+import love.forte.simbot.definition.Friend;
+import love.forte.simbot.definition.Group;
+import love.forte.simbot.definition.GroupMember;
+import love.forte.simbot.event.ContinuousSessionContext;
+import love.forte.simbot.event.FriendMessageEvent;
+import love.forte.simbot.event.GroupMessageEvent;
 import love.forte.simbot.message.*;
 import love.forte.simbot.resources.ByteArrayResource;
 import love.forte.simbot.resources.PathResource;
 import love.forte.simbot.resources.Resource;
-import net.mamoe.mirai.contact.AudioSupported;
-import net.mamoe.mirai.message.data.Audio;
-import net.mamoe.mirai.utils.ExternalResource;
 import org.example.listener.image;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -48,10 +36,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 
@@ -202,8 +188,8 @@ public class muteall {
 
     }
 
-    @Listener
-    @Filter(targets = @Filter.Targets(groups = {"740994565", "494050282"}))
+//    @Listener
+//    @Filter(targets = @Filter.Targets(groups = {"740994565", "494050282"}))
     public void gtp(GroupMessageEvent event) {
         String plainText = event.getMessageContent().getPlainText();
         if (plainText.contains("亚托莉 ")) {
@@ -217,7 +203,6 @@ public class muteall {
                 event.replyBlocking("服务器波动或者未查询到，请重试或者换个问题喵~");
                 System.out.println(s1);
             } else {
-
                 JSONObject jsonObject = JSON.parseObject(s1);
                 if (jsonObject == null) {
                     event.replyBlocking("服务器波动或者未查询到，请重试或者换个问题喵~");
@@ -230,30 +215,14 @@ public class muteall {
 //        return EventResult.truncate();
     }
 
-//    @Listener
-//    @Filter("帮助")
-//    public void help(FriendMessageEvent event) throws IOException {
-//        String s = "群内发送 “”银发“、”兽耳“、”壁纸推荐“可回复相应的图片\n使" +
-//                "用标签查询需输入标准的查询格式：例如：@ロボット2号 num:3,uid:129822,key:水着アズ" +
-//                "author_uuid 输入uid即可，keyword 输入key即可，查询的标点符号都为英文符号，别用中文符号。" +
-//                "发送 亚托莉亲亲、亚托莉口我；可触发事件" +
-//                "需要提问格式为 亚托莉 xxxxx（亚托莉后面记得加上一个空格哦）" +
-//                "\n向我发送“涩图”可能会有惊喜哦~";
-//        Path path = Paths.get("E:\\img\\atri\\help.jpg");
-//        byte[] bytes = Files.readAllBytes(path);
-//        ByteArrayResource resource = Resource.of(bytes, path.toString());
-//        Image<?> image = Image.of(resource);
-//        ID id = event.getFriend().getId();
-//        MiraiNudge miraiNudge = new MiraiNudge(id);
-//        Messages messages = Messages.toMessages(Text.of(s), image, miraiNudge);
-//        event.getFriend().sendBlocking(messages);
-//    }
+
 
     @Listener//戳一戳会回复一个戳一戳
     @Filter(targets = @Filter.Targets(groups = {"740994565", "494050282"}))
     public void nudge1(MiraiGroupNudgeEvent event) {
         System.out.println(event.getAuthor());
         MiraiNudge nudge = new MiraiNudge(event.getAuthor().getId());
+        event.getGroup().sendAsync("在戳就戳傻啦~");
         event.getGroup().sendAsync(nudge);
     }
 

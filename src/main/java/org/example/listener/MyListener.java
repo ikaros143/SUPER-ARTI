@@ -1,32 +1,25 @@
 package org.example.listener;
 
 
-import ch.qos.logback.core.util.TimeUtil;
 import love.forte.simboot.annotation.ContentTrim;
 import love.forte.simboot.annotation.Filter;
 import love.forte.simboot.annotation.Listener;
 import love.forte.simbot.ID;
-import love.forte.simbot.InstantTimestamp;
-import love.forte.simbot.Timestamp;
-import love.forte.simbot.action.MuteSupport;
 import love.forte.simbot.definition.Friend;
 import love.forte.simbot.event.EventResult;
 import love.forte.simbot.event.FriendMessageEvent;
 import love.forte.simbot.event.GroupMessageEvent;
 import love.forte.simbot.event.RequestEvent;
 import love.forte.simbot.message.*;
-import love.forte.simbot.message.Image;
 import love.forte.simbot.resources.PathResource;
 import love.forte.simbot.resources.Resource;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -220,7 +213,8 @@ public class MyListener {
     }
     @Listener //好友/群邀请自动通过
     public void acc(RequestEvent event) {
-        event.acceptBlocking();
+        event.acceptBlocking();//同意
+//        event.rejectBlocking();//拒绝
     }
 
 

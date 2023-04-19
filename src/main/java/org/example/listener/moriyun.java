@@ -34,7 +34,7 @@ public class moriyun {
     @Value("${moliyun.ApiSecret}")
     private String ApiSecret;
 
-    @Listener(priority = 1000,async = true)
+    @Listener(async = true)
     @Filter(targets = @Filter.Targets(groups = {"740994565", "494050282"}, atBot = true))
     @ContentTrim
     public EventResult moliyun(GroupMessageEvent event) throws MalformedURLException {
