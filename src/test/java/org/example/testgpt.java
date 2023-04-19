@@ -186,7 +186,8 @@ public class testgpt {
         // ...
 
         System.out.println(completions);
-
     }
+
+
 
 }

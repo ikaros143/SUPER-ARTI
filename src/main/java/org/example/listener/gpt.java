@@ -33,8 +33,8 @@ import java.util.*;
 public class gpt {
 
     private static final String API_ENDPOINT = "https://api.openai.com/v1/engines/davinci-codex/completions";
-    private static final String API_KEY = "Bearer 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";
-    @Autowired
+    private static final String API_KEY = "Bearer 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";
+        @Autowired
     private RedisService redisService;
 
     /**
@@ -79,6 +79,12 @@ public class gpt {
                 System.out.println(result);
                 JSONObject jsonObject1 = JSON.parseObject(result);
                 JSONArray choices = jsonObject1.getJSONArray("choices");
+                if (choices==null){
+                    JSONObject error = jsonObject1.getJSONObject("error");
+                    String message = error.getString("message");
+                    event.getGroup().sendBlocking("error:"+message);
+                    return;
+                }
                 JSONObject json = choices.getJSONObject(0);
                 JSONObject message = json.getJSONObject("message");
                 String content = message.getString("content");
@@ -173,23 +179,6 @@ public class gpt {
     }
 
     private void dancirequest(GroupMessageEvent event, String plainText, String uid) throws IOException {
-//        JSONObject jsonObject = new JSONObject();
-//        JSONArray messages1 = new JSONArray();
-//        messages1.add(new messages(plainText, "user").toJSON());
-//        System.out.println(messages1.toJSONString()); //[{"role": "id", "content": "Hello!"},{"role":"assistant","content":"嗨，主人！"}]
-//        jsonObject.put("temperature",0.9);          //{"role":"assistant","content":"嗨，主人！"}
-//        jsonObject.put("model","gpt-3.5-turbo");
-//        jsonObject.put("frequency_penalty",0.8);
-//        jsonObject.put("presence_penalty",0.8);
-//        jsonObject.put("messages",messages1);
-//        HttpEntity entity2 = new StringEntity(jsonObject.toString(), ContentType.APPLICATION_JSON);
-//        CloseableHttpClient httpClient2 = HttpClientBuilder.create().build();
-//        HttpUriRequest request2 = RequestBuilder.post("https://api.openai-proxy.com/v1/chat/completions")
-//                .setHeader("Content-Type", "application/json")
-//                .setHeader("Authorization", API_KEY)
-//                .setEntity(entity2)
-//                .build();
-//        CloseableHttpResponse response2 = httpClient2.execute(request2);
         JSONArray messages1 = new JSONArray();
         messages1.add(new messages(plainText, "user").toJSON());
         CloseableHttpResponse closeableHttpResponse = getCloseableHttpResponse(plainText);
