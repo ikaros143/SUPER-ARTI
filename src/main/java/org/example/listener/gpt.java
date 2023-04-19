@@ -195,6 +195,12 @@ public class gpt {
             System.out.println(result);
             JSONObject jsonObject2 = JSON.parseObject(result);
             JSONArray choices = jsonObject2.getJSONArray("choices");
+            if (choices==null){
+                JSONObject error = jsonObject2.getJSONObject("error");
+                String message = error.getString("message");
+                event.getGroup().sendBlocking("error:"+message);
+                return;
+            }
             JSONObject json = choices.getJSONObject(0);
             JSONObject message = json.getJSONObject("message");
             String content = message.getString("content");
@@ -244,6 +250,12 @@ public class gpt {
             System.out.println(result);
             JSONObject jsonObject2 = JSON.parseObject(result);
             JSONArray choices = jsonObject2.getJSONArray("choices");
+            if (choices==null){
+                JSONObject error = jsonObject2.getJSONObject("error");
+                String message = error.getString("message");
+                event.getGroup().sendBlocking("error:"+message);
+                return;
+            }
             JSONObject json = choices.getJSONObject(0);
             JSONObject message = json.getJSONObject("message");
             String content = message.getString("content");
