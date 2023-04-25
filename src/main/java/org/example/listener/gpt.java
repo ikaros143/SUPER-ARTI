@@ -32,9 +32,8 @@ import java.util.*;
 @Component
 public class gpt {
 
-    private static final String API_ENDPOINT = "https://api.openai.com/v1/engines/davinci-codex/completions";
-    private static final String API_KEY = "Bearer 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";
-        @Autowired
+    private static final String API_KEY = "Bearer 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";
+    @Autowired
     private RedisService redisService;
 
     /**
@@ -48,14 +47,13 @@ public class gpt {
         JSONObject jsonObject = new JSONObject();
         JSONArray messages = new JSONArray();
         messages.add(new messages(substring, "user").toJSON());
-        System.out.println(messages.toJSONString());
-        jsonObject.put("temperature", 0.9);
+        System.out.println("messages"+messages.toJSONString());
+        jsonObject.put("temperature", 0.8);
         jsonObject.put("model", "gpt-3.5-turbo");
         jsonObject.put("frequency_penalty", 0.8);
         jsonObject.put("presence_penalty", 0.8);
         jsonObject.put("messages", messages);
         HttpEntity entity1 = new StringEntity(jsonObject.toString(), ContentType.APPLICATION_JSON);
-        String s = jsonObject.toString();
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         HttpUriRequest request = RequestBuilder.post("https://api.openai-proxy.com/v1/chat/completions")
                 .setHeader("Content-Type", "application/json")
@@ -122,7 +120,7 @@ public class gpt {
 
     }
 
-    @Filter(value = "开始对话", targets = @Filter.Targets(groups = {"740994565", "494050282"}))
+    @Filter(value = "开始对话", targets = @Filter.Targets(groups = {"740994565", "494050282","621673939"}))
     @Listener
     public void lxgpt(GroupMessageEvent event, ContinuousSessionContext sessionContext) throws IOException {
         String plainText = event.getMessageContent().getPlainText();
@@ -157,7 +155,10 @@ public class gpt {
                     String truncatedStr = timestampStr.substring(0, timestampStr.length() - 3);
                     long truncatedTimestamp = Long.parseLong(truncatedStr);
                     uids.put(truncatedTimestamp, newNick);//存入时间戳
-                    lxrequest(event, uid, hgetall, openai, uids);
+//                    System.out.println("openai:"+openai);
+//                    System.out.println("uids:"+uids);
+//                    System.out.println("hgetall:"+hgetall);
+                    lxrequest(event, uid, hgetall, openai, uids,truncatedTimestamp);
                 } else {
                     if (newNick.equals("变猫娘")) {
                         dancirequest(event, a, uid);
@@ -184,15 +185,16 @@ public class gpt {
         CloseableHttpResponse closeableHttpResponse = getCloseableHttpResponse(plainText);
         JSONObject jsonObject3 = messages1.getJSONObject(0);
         String usercontent = jsonObject3.getString("content");
+        //获取当前时间戳
         long l = System.currentTimeMillis();
         String timestampStr = String.valueOf(l);
         String truncatedStr = timestampStr.substring(0, timestampStr.length() - 3);
         long truncatedTimestamp = Long.parseLong(truncatedStr);
+        //储存连续对话的map
         Map<String, Map<Long, String>> sessionData = new HashMap<>();//总map
         try {
             HttpEntity entity = closeableHttpResponse.getEntity();
             String result = EntityUtils.toString(entity);
-            System.out.println(result);
             JSONObject jsonObject2 = JSON.parseObject(result);
             JSONArray choices = jsonObject2.getJSONArray("choices");
             if (choices==null){
@@ -207,12 +209,13 @@ public class gpt {
             String created = jsonObject2.getString("created");
             Map<Long, String> AImap = new HashMap<>();//ai信息
             Map<Long, String> usermap = new HashMap<>();//user信息
-            usermap.put(truncatedTimestamp - 50, usercontent);//存入时间戳
+            usermap.put(truncatedTimestamp , usercontent);//存入时间戳
             sessionData.put("user", usermap);
-            AImap.put(Long.valueOf(created), content);
+            AImap.put(truncatedTimestamp+1, content);
             sessionData.put("openai", AImap);
             event.getGroup().sendAsync(content);
         } finally {
+//            System.out.println("sessionData:"+sessionData);
             redisService.hset("sessions", uid, sessionData);//存入历史对话
             closeableHttpResponse.close();
         }
@@ -221,14 +224,15 @@ public class gpt {
     /**
      * 连续对话
      *
-     * @param event   群
-     * @param uid     角色
+     * @param event              群
+     * @param uid                角色
      * @param hgetall
      * @param openai
      * @param uids
+     * @param truncatedTimestamp
      * @throws IOException
      */
-    private void lxrequest(GroupMessageEvent event, String uid, Map<String, Map<Long, String>> hgetall, Map<Long, String> openai, Map<Long, String> uids) throws IOException {
+    private void lxrequest(GroupMessageEvent event, String uid, Map<String, Map<Long, String>> hgetall, Map<Long, String> openai, Map<Long, String> uids, long truncatedTimestamp) throws IOException {
         JSONArray getarray = getarray(hgetall);
         JSONObject jsonObject1 = new JSONObject();
         jsonObject1.put("temperature", 0.9);          //{"role":"assistant","content":"嗨，主人！"}
@@ -247,7 +251,7 @@ public class gpt {
         try {
             HttpEntity entity = response.getEntity();
             String result = EntityUtils.toString(entity);
-            System.out.println(result);
+            System.out.println("result:"+result);
             JSONObject jsonObject2 = JSON.parseObject(result);
             JSONArray choices = jsonObject2.getJSONArray("choices");
             if (choices==null){
@@ -260,11 +264,12 @@ public class gpt {
             JSONObject message = json.getJSONObject("message");
             String content = message.getString("content");
             String created = jsonObject2.getString("created");
-            openai.put(Long.valueOf(created), content);
+            openai.put(truncatedTimestamp+1, content);
             event.getGroup().sendAsync(content);
             hgetall.put("openai", openai);//
-            hgetall.put(uid, uids);//
+            hgetall.put("user", uids);
         } finally {
+//            System.out.println("存入redis的"+hgetall);
             redisService.hset("sessions", uid, hgetall);//
             response.close();
         }
@@ -288,7 +293,7 @@ public class gpt {
         }
 // 对List进行按时间戳排序
         Collections.sort(sortedEntries, Comparator.comparingLong(entry -> Long.parseLong(String.valueOf(entry.getKey()))));
-//        System.out.println(sortedEntries);
+        System.out.println("sortedEntries:"+sortedEntries);
 // 将List中的每个JSONObject的信息填充到JSONArray中
         JSONArray messages = new JSONArray();
         for (int i = 0; i < sortedEntries.size(); i++) {
@@ -303,7 +308,7 @@ public class gpt {
                 messages.add(message);
             }
         }
-        System.out.println("messages" + messages.toString());// 输出JSONArray
+        System.out.println("messages:" + messages.toString());// 输出JSONArray
         return messages;
     }
 }
