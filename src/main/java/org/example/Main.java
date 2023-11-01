@@ -1,14 +1,13 @@
 package org.example;
 
 import love.forte.simboot.spring.autoconfigure.EnableSimbot;
-import net.mamoe.mirai.utils.BotConfiguration.MiraiProtocol;
+import org.example.untils.CoreUsage;
+import org.example.untils.Example;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import xyz.cssxsh.mirai.tool.FixProtocolVersion;
-
-import java.util.Map;
 
 /**
  * 程序入口。
@@ -38,21 +37,15 @@ public class Main {
     /**
      * main方法，启动Spring应用程序。
      */
+
+
     public static void main(String[] args) {
-        update();
-        Map<MiraiProtocol, String> info = info();
-        System.out.println(info);
+        CoreUsage.setup();
+
         SpringApplication.run(Main.class, args);
     }
 
-    // 升级协议版本
-    public static void update() {
-        FixProtocolVersion.update();
-    }
-    // 获取协议版本信息 你可以用这个来检查update是否正常工作
-    public static Map<MiraiProtocol, String> info() {
-        return FixProtocolVersion.info();
-    }
+
 
 }
 

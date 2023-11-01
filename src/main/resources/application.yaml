@@ -1,7 +1,4 @@
-#component: "simbot.mirai"
-#code: 3502568092
-#passwordInfo:
-#  text: "xxx2000..."
+
 simbot:
   # 是否在bot注册完成后自动启动他们。
   # 默认为 true
@@ -14,17 +11,15 @@ server:
   port: 9999
 #    - 'classpath:simbot-bots/*.bot*'
 # Redis 服务?地址
-#spring:
-#  data:
-#    redis:
-#      port: 6379
-#      host: localhost
+spring:
+  data:
+    redis:
+      port: 6379
+      host: localhost
 #茉莉云配置
 moliyun:
   ApiKey: bbrad7alnxxgqkm3
   ApiSecret: 132160
 
-open:
-  ai:
-    url: https://api.openai.com/
-    token: sk-JXefzt
+web:
+  uploadPath: ./src/main/resources/txlib

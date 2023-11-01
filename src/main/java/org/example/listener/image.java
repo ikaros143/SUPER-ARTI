@@ -51,72 +51,64 @@ public class image {
     @Autowired
     private RedisService redisService;
 
-    @Listener //模糊搜索图片
+    @Listener   //模糊搜索图片
     @Filter(targets = @Filter.Targets(groups = {"740994565", "494050282"}, atBot = true))
     public synchronized EventResult group5(GroupMessageEvent event) {
         String plainText = event.getMessageContent().getPlainText();//获取群中发送的文本
         Map<String, String> map = map(plainText);//将文字转为map格式
-      while (!map.isEmpty()){
-          if (redisTemplate.hasKey("1")) { //判断是否还在cd中
-              System.out.println(redisTemplate.hasKey("1") + "haskey");
-              Long expire = redisTemplate.getExpire("1", TimeUnit.SECONDS);
-              System.out.println(expire);
-              event.replyBlocking("查询cd中，还有" + expire + "秒");
-          } else {
-              redisTemplate.opsForValue().set("1", 1, 15, TimeUnit.SECONDS);//一定时间内请求次数限制，5秒
-              String b = "https://sex.nyan.xyz/api/v2/?";
-              String urlstring = urlstring(plainText);
-              String s = doGet(b+urlstring, null);//把链接和map参数发送请求
-              JSONObject jsonObject = JSON.parseObject(s);
-              JSONArray honors = jsonObject.getJSONArray("data");
-              if (honors == null) {
-                  event.getGroup().sendAsync("未查到喵~");
-              } else {
-                  for (int i = 0; i < honors.size(); i++) {
-                      JSONObject honor = (JSONObject) honors.get(i);
-                      String aa = honor.getString("url");
-                      String author_uid = honor.getString("author_uid");
-                      System.out.println(aa);
-                      ResourceImage resourceImage = httpGet(aa, i);
-                      event.replyBlocking(aa);
-                      Messages messages = Messages.toMessages(Text.of(author_uid), resourceImage);
-                      event.getGroup().sendBlocking(messages);
-                  }
-              }
-          }
-          break;
-      }
-      if (map.isEmpty()){
-          return null;
-      }else {
-          return EventResult.truncate();
-      }
+        while (!map.isEmpty()) {
+            String b = "https://sex.nyan.xyz/api/v2/?";
+            String urlstring = urlstring(plainText);
+            String s = doGet(b + urlstring, null);//把链接和map参数发送请求
+            JSONObject jsonObject = JSON.parseObject(s);
+            JSONArray honors = jsonObject.getJSONArray("data");
+            if (honors == null) {
+                event.getGroup().sendAsync("未查到喵~");
+            } else {
+                for (int i = 0; i < honors.size(); i++) {
+                    JSONObject honor = (JSONObject) honors.get(i);
+                    String aa = honor.getString("url");
+                    String author = honor.getString("author");
+                    System.out.println(aa);
+                    ResourceImage resourceImage = httpGet(aa, i);
+                    event.replyBlocking(aa);
+                    Messages messages = Messages.toMessages(Text.of(author), resourceImage);
+                    event.getGroup().sendAsync(messages);
+                    event.replyBlocking(aa);
+                }
+            }
+            break;
+        }
+        if (map.isEmpty()) {
+            return null;
+        } else {
+            return EventResult.truncate();
+        }
     }
-//返回拼接的字符串
-    public  String urlstring(String str) {
+
+    //返回拼接的字符串
+    public static String urlstring(String str) {
 //        String str = "num:2,UID:2,tag:夏天&山";
         String str2 = str.replaceAll(" ", "");
         String[] split = str2.split(",");
-        Map<String,List<String>> map = new HashMap<>();
+        Map<String, List<String>> map = new HashMap<>();
 //        System.out.println(Arrays.toString(split)); //[num:2, UID:2, tag:夏天&山]
-        for (int j=0;j<split.length;j++){
+        for (int j = 0; j < split.length; j++) {
             String[] split1 = split[j].split(":");//[num,2]...[tag,夏天&山]
-            String sm="";
+            String sm = "";
             List<String> l = new ArrayList<>();
-            for (int i=0;i<split1.length;i++){
-                if (i==0){
-                    if(split1[0].equals("uid")){
-                        sm="author_uuid";
-                    }else {
-                        sm =split1[0];
+            for (int i = 0; i < split1.length; i++) {
+                if (i == 0) {
+                    if (split1[0].equals("uid")) {
+                        sm = "author_uuid";
+                    } else {
+                        sm = split1[0];
                     }
-//                    map.put(split1[0],l);
-//                    System.out.println("sm"+i+sm);
-                }else {
-                    if (split1[i].contains("&")){
+                } else {
+                    if (split1[i].contains("&")) {
                         String[] split2 = split1[i].split("&");
 //                        System.out.println(Arrays.toString(split2)); //[tag:夏天, 山]
-                        for (String s3:split2){
+                        for (String s3 : split2) {
                             l.add(s3);
                         }
                     } else {
@@ -124,34 +116,60 @@ public class image {
                     }
                 }
             }
-            map.put(sm,l);
+            map.put(sm, l);
 //            System.out.println(map);
         }
         Set<String> strings = map.keySet();
-        String b = "";String c="";
-        for (String s : strings){
+        String b = "";
+        String c = "";
+        for (String s : strings) {
             List<String> list = map.get(s);
-            for (String a : list){
-                b =b+s+"="+a+"&";
+            for (String a : list) {
+                b = b + s + "=" + a + "&";
             }
         }
-//        System.out.println(b.substring(0,b.length()-1));
-        return b.substring(0,b.length()-1);
+        System.out.println(b.substring(0, b.length() - 1));
+        return b.substring(0, b.length() - 1);
     }
 
 
-    @NotNull
-    public ResourceImage httpGet(String url, int i) {
+//    @NotNull
+//    public static ResourceImage httpGet(String url, int i) {
+//        RestTemplate restTemplate = new RestTemplate();
+//        JSONObject template = new JSONObject();
+//        try {
+//            ResponseEntity<byte[]> responseEntity = restTemplate.exchange
+//                    (url, HttpMethod.GET, null, byte[].class);//根据链接获取图片本体
+//            byte[] body = responseEntity.getBody();
+//            FileOutputStream fileOutputStream = new FileOutputStream(new File("/mcl/img/" + i + ".png"));
+//            fileOutputStream.write(body);//保存到本地
+//            fileOutputStream.close();
+//            Path path = Paths.get("/mcl/img/" + i + ".png");//上传到服务器
+//            PathResource of = Resource.of(path);
+//            ResourceImage of1 = Image.of(of);
+//            return of1;
+//        } catch (HttpClientErrorException e) {
+//            e.printStackTrace();
+//        } catch (IOException s) {
+//            s.printStackTrace();
+//        }
+//        Path path = Paths.get("/mcl/img/" + 1 + ".png");//上传到服务器
+//        PathResource of = Resource.of(path);
+//        ResourceImage of1 = Image.of(of);
+//        return of1;
+//
+//    }
+
+    public static ResourceImage httpGet(String url, int i) {
         RestTemplate restTemplate = new RestTemplate();
-        JSONObject template = new JSONObject();
         try {
             ResponseEntity<byte[]> responseEntity = restTemplate.exchange
                     (url, HttpMethod.GET, null, byte[].class);//根据链接获取图片本体
             byte[] body = responseEntity.getBody();
-            FileOutputStream fileOutputStream = new FileOutputStream(new File("E:\\img\\" + i + ".png"));
+            FileOutputStream fileOutputStream = new FileOutputStream(new File("E:\\img" + i + ".png"));
             fileOutputStream.write(body);//保存到本地
             fileOutputStream.close();
-            Path path = Paths.get("E:\\img\\" + i + ".png");//上传到服务器
+            Path path = Paths.get("E:\\img" + i + ".png");//上传到服务器
             PathResource of = Resource.of(path);
             ResourceImage of1 = Image.of(of);
             return of1;
@@ -160,17 +178,16 @@ public class image {
         } catch (IOException s) {
             s.printStackTrace();
         }
-        Path path = Paths.get("E:\\img\\" + 1 + ".png");//上传到服务器
+        Path path = Paths.get("E:\\img" + 1 + ".png");//上传到服务器
         PathResource of = Resource.of(path);
         ResourceImage of1 = Image.of(of);
         return of1;
-
     }
 
     public static Map<String, String> map(String s1) {
 //        String str = "num:2,UID作者:2,tag:3";
         String str2 = s1.replaceAll(" ", "");
-//        System.out.println(str2);
+        System.out.println(str2);
         String[] strings = str2.split("\\,");
         Map<String, String> map = new HashMap<>();
         // 循环加入map集合
@@ -191,7 +208,7 @@ public class image {
                 map.put(ss[0], String.valueOf((ss[1])));
             }
         }
-//        System.out.println("map" + map);
+        System.out.println("map" + map);
         return map;
     }
 
@@ -210,7 +227,7 @@ public class image {
             }
             URI uri = builder.build();
 
-            System.out.println(uri);
+//            System.out.println(uri);
 
             // 创建http GET请求
             HttpGet httpGet = new HttpGet(uri);

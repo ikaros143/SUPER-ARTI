@@ -6,8 +6,11 @@ import com.alibaba.fastjson.JSONObject;
 import love.forte.simboot.annotation.Filter;
 import love.forte.simboot.annotation.Listener;
 
-import love.forte.simbot.component.mirai.event.MiraiGroupMessageEvent;
 
+import love.forte.simbot.component.mirai.message.MiraiForwardMessageBuilder;
+import love.forte.simbot.component.mirai.message.MiraiSendOnlyForwardMessage;
+import love.forte.simbot.event.FriendMessageEvent;
+import love.forte.simbot.event.GroupMessageEvent;
 import love.forte.simbot.message.*;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -25,45 +28,82 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 //"740994565",
 @Component
 public class postImage {
     @Autowired
     private image reimage;
+
     @Listener
-    @Filter(targets = @Filter.Targets(groups = {"740994565","494050282"}))
-    public void postimg(MiraiGroupMessageEvent  event)  {
-       String s = event.getMessageContent().getPlainText();//获取发送的信息
-       if (s.contains("来张图")){
-           String substring = s.substring(4);
-           System.out.println("发送的消息" + substring);
-           String data = getData(substring);
-           String img = doPostJson("https://api.lolicon.app/setu/v2", data);
-           JSONObject jsonObject = JSON.parseObject(img);
-           JSONArray data1 = jsonObject.getJSONArray("data");
-           System.out.println(data1.size());
-           if (data1.size()==0){
-               event.getGroup().sendAsync("未查到喵");
-           }else {
+    @Filter(targets = @Filter.Targets(groups = {"740994565", "494050282"}))
+    public void postimg(GroupMessageEvent event) {
+        String s = event.getMessageContent().getPlainText();//获取发送的信息
+        if (s.contains("来张图")) {
+            String substring = s.substring(4);
+            System.out.println("发送的消息" + substring);
+            String data = getData(substring);
+            String img = doPostJson("https://api.lolicon.app/setu/v2", data);
+            JSONObject jsonObject = JSON.parseObject(img);
+            JSONArray data1 = jsonObject.getJSONArray("data");
+            System.out.println(data1.size());
+            if (data1.size() == 0) {
+                event.getGroup().sendBlocking("未查到喵");
+            } else {
 //               MessagesBuilder builder = new MessagesBuilder();
 //               Messages append = null;
-               for (int i = 0; i < data1.size(); i++) {
-                   StringBuilder sb = new StringBuilder();
-                   JSONObject honor = (JSONObject) data1.get(i);
-                   JSONObject urls = honor.getJSONObject("urls");
-                   String original = urls.getString("original");
-                   String uid = honor.getString("uid");
-                   ResourceImage resourceImage = reimage.httpGet(original, i);
-                   System.out.println(original);
-                   Messages messages = Messages.toMessages(Text.of(uid), resourceImage);
-                   event.getGroup().sendBlocking(messages);
-                   event.replyBlocking(original);
-               }
-           }
-       }
-
-
+                for (int i = 0; i < data1.size(); i++) {
+                    StringBuilder sb = new StringBuilder();
+                    JSONObject honor = (JSONObject) data1.get(i);
+                    JSONObject urls = honor.getJSONObject("urls");
+                    String original = urls.getString("original");
+                    String uid = honor.getString("uid");
+                    ResourceImage resourceImage = reimage.httpGet(original, i);
+                    System.out.println(original);
+                    Messages messages = Messages.toMessages(Text.of(uid), resourceImage);
+                    event.getGroup().sendBlocking(messages);
+                    event.replyBlocking(original);
+                }
+            }
+        }
     }
+
+    @Listener
+    public void postimg1(FriendMessageEvent event) {
+        String s = event.getMessageContent().getPlainText();//获取发送的信息
+        if (s.contains("来张图")) {
+            String substring = s.substring(4);
+            System.out.println("发送的消息" + substring);
+            String data = getData(substring);
+            String img = doPostJson("https://api.lolicon.app/setu/v2", data);
+            JSONObject jsonObject = JSON.parseObject(img);
+            JSONArray data1 = jsonObject.getJSONArray("data");
+            System.out.println(data1.size());
+            if (data1.size() == 0) {
+                event.getFriend().sendBlocking("未查到喵");
+            } else {
+//               MessagesBuilder builder = new MessagesBuilder();
+//               Messages append = null;
+
+
+                for (int i = 0; i < data1.size(); i++) {
+                    StringBuilder sb = new StringBuilder();
+                    JSONObject honor = (JSONObject) data1.get(i);
+                    JSONObject urls = honor.getJSONObject("urls");
+                    String original = urls.getString("original");
+                    String uid = honor.getString("uid");
+                    String author = honor.getString("author");
+                    ResourceImage resourceImage = reimage.httpGet(original, i);
+                    System.out.println(original);
+                    Messages messages = Messages.toMessages(Text.of(author), resourceImage);
+                    event.getFriend().sendBlocking(messages);
+                    event.getFriend().sendAsync(original);
+
+                }
+            }
+        }
+    }
+
     public String getData(String s2) {
 //         String s2="num:3,tag:明日方舟|原神&白丝|黑丝";
         String str2 = s2.replaceAll(" ", "");
@@ -85,8 +125,7 @@ public class postImage {
             } else if (ss[0].equals("uid")) {
                 list.add(ss[1]);
                 map.put("uid", list);
-            }
-            else if (ss[0].equals("r18")) {
+            } else if (ss[0].equals("r18")) {
                 list.add(ss[1]);
                 map.put("r18", list);
             } else if (ss[0].equals("key")) {

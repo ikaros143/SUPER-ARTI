@@ -7,12 +7,11 @@ import love.forte.simbot.event.GroupMessageEvent;
 import love.forte.simbot.message.*;
 import love.forte.simbot.resources.ByteArrayResource;
 import love.forte.simbot.resources.Resource;
-import org.example.until.until;
+import org.example.mute.until.until;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
@@ -35,7 +34,7 @@ public class ops {
 
     @Listener
     @Filter(targets = @Filter.Targets(groups = {"740994565","494050282"}))
-    public void group(@RequestParam(required = false,defaultValue = "0",value ="date") GroupMessageEvent event) {
+    public void group(GroupMessageEvent event) {
         String plainText = event.getMessageContent().getPlainText();
         if (plainText.contains("亚托莉")){
 
@@ -49,7 +48,7 @@ public class ops {
                         At at = new At(authorId);
                         Messages messages = Messages.toMessages(at, Text.of(" 骂原神是吧？"));
                         event.getGroup().sendBlocking(messages);
-                        event.getAuthor().muteAsync(3, TimeUnit.MINUTES);
+                        event.getAuthor().muteAsync(2, TimeUnit.MINUTES);
                     } else {
                         ReceivedMessageContent messageContent = event.getMessageContent();
                         ID authorId = event.getAuthor().getId();
@@ -58,7 +57,13 @@ public class ops {
                         event.getBot().delay(Duration.ofSeconds(2),()->{
                             event.getGroup().sendBlocking(messages);
                         });
-
+//                        try {
+//                            String a ="https://api.r10086.com/img-api.php?zsy=原神";//图片url
+//                            MessagesBuilder seTu = getSeTu(a);//调用字节流获取图片
+//                            event.getGroup().sendAsync(seTu.build());
+//                        } catch (IOException e) {
+//                            throw new RuntimeException(e);
+//                        }
                     }
                     break;
                 }
@@ -74,26 +79,24 @@ public class ops {
         return m.find();
     }
 
-    @NotNull
+    @NotNull(value = "姓名不能为null")
     private static MessagesBuilder getSeTu(String s) throws IOException {
         HttpURLConnection conn = (HttpURLConnection) new URL(s)
                 .openConnection();
-        conn.setInstanceFollowRedirects(false);//禁止重定向
+        conn.setInstanceFollowRedirects(false);
         conn.setConnectTimeout(5000);
-        String headerField = conn.getHeaderField(1);
-        System.out.println(headerField);
         //重定向乱码
-        String location = new String(conn.getHeaderField("location").getBytes("ISO-8859-1"), "UTF-8");
-
+        String location = new String(conn.getHeaderField("Location").getBytes("ISO-8859-1"), "UTF-8");
         String redirectUrl = "https://api.r10086.com" + location;
+//        System.out.println(redirectUrl);
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<byte[]> responseEntity = restTemplate.exchange(redirectUrl, HttpMethod.GET, null, byte[].class);
         byte[] body = responseEntity.getBody();
-        FileOutputStream fileOutputStream = new FileOutputStream(new File("E:\\img\\op\\2.webp"));
+        FileOutputStream fileOutputStream = new FileOutputStream(new File("/mcl/img/op/2.webp"));
         fileOutputStream.write(body);
         fileOutputStream.close();
-        until.webpToPng("E:\\img\\op\\2.webp", "E:\\img\\op\\3.png");//调用格式转换工具
-        Path path = Paths.get("E:\\img\\op\\3.png");
+        until.webpToPng("/mcl/img/op/2.webp", "/mcl/img/op/3.png");//调用格式转换工具
+        Path path = Paths.get("/mcl/img/op/3.png");
         byte[] bytes = Files.readAllBytes(path);
         ByteArrayResource resource = Resource.of(bytes, path.toString());
         Image<?> image = Image.of(resource);

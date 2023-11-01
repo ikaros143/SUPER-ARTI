@@ -1,19 +1,19 @@
 package org.example;
 
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONException;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.*;
 import love.forte.simbot.message.MessagesBuilder;
+import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.*;
+import org.example.listener.image;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+
 import java.io.*;
 import java.net.URI;
 import java.util.*;
@@ -28,53 +28,13 @@ import org.apache.http.util.EntityUtils;
 public class test {
 
 
-    public static void main(String[] args) throws  JSONException {
-        // 构建请求头
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentType(MediaType.APPLICATION_JSON);
-//        headers.add("Api-Key", "bbrad7alnxxgqkm3");
-//        headers.add("Api-Secret", "132160");
-        String s = "{\"code\":\"00000\",\"plugin\":\"Chat\",\"data\":[{\"content\":\"主人不怕触电\\u2026\",\"typed\":1,\"remark\":\"\"}],\"message\":\"请求成功\"}";
-        JSONObject body = new JSONObject();
-        com.alibaba.fastjson.JSONObject jsonObject =  JSON.parseObject(s);
-// 发送的内容
-        body.put("content", "亲亲我");
-//// 消息类型，1：私聊，2：群聊
-//        body.put("type", 1);
-//        body.put("from", "ikaros");
-//        body.put("fromName", "ikaros");
-//        HttpEntity<String> formEntity = new HttpEntity<String>(body.toString(), headers);
-//        TestRestTemplate restTemplate = new TestRestTemplate();
-//        JSONObject jsonObject = restTemplate.postForEntity("https://api.mlyai.com/reply", formEntity, JSONObject.class).getBody();
-//        System.out.println(jsonObject.toJSONString());
-//        String s = JSON.toJSONString(jsonObject);
-        String code = jsonObject.getString("code");
-        if (code.equals("C1001")){
-            System.out.println("次数已用完");
-        }else if (code.equals("00000")){
-            JSONArray honors = jsonObject.getJSONArray("data");
-//            System.out.println(honors.toJSONString());
-            for (int i=0;i<honors.size();i++){
-                Object honor = honors.get(i);
-                JSONObject jsonObject2 = (JSONObject) JSON.toJSON(honor);
-                String typed = jsonObject2.getString("typed");
-                if (typed.equals(1)){
-                    String content = jsonObject2.getString("content");
-                    System.out.println(content);
-                } else if (typed.equals(2)){
-                    //图片发送
-                    //https://files.molicloud.com/
-                }else if (typed.equals(4)){
-                    //音频
-                }
-                System.out.println(jsonObject2.toJSONString());
+    public static void main(String[] args) throws IOException, JSONException {
+    StringBuffer stringBuffer = new StringBuffer();
+    for (int i =0;i<3;i++){
+        stringBuffer.append(i);
+    }
 
-
-            }
-        }      else {
-            //异常
-        }
-
+        System.out.println(stringBuffer);
     }
 
     public static void httpGet(String url, int i) throws IOException {
@@ -94,23 +54,23 @@ public class test {
         }
     }
 
-//    public static String sendGet(String url) throws IOException {
-//        CloseableHttpClient httpClient;
-//        HttpGet httpGet;
-//        String CONTENT_TYPE = "Content-Type";
-//        httpClient = HttpClients.createDefault();
-//        httpGet = new HttpGet(url);
-//        CloseableHttpResponse response = httpClient.execute(httpGet);
-//        String resp;
-//        try {
-//            HttpEntity entity = response.getEntity();
-//            resp = EntityUtils.toString(entity, "utf-8");
-//            EntityUtils.consume(entity);
-//        } finally {
-//            response.close();
-//        }
-//        return resp;
-//    }
+    public static String sendGet(String url) throws IOException {
+        CloseableHttpClient httpClient;
+        HttpGet httpGet;
+        String CONTENT_TYPE = "Content-Type";
+        httpClient = HttpClients.createDefault();
+        httpGet = new HttpGet(url);
+        CloseableHttpResponse response = httpClient.execute(httpGet);
+        String resp;
+        try {
+            HttpEntity entity = response.getEntity();
+            resp = EntityUtils.toString(entity, "utf-8");
+            EntityUtils.consume(entity);
+        } finally {
+            response.close();
+        }
+        return resp;
+    }
 
     public static String doGet(String url, Map<String, String> param) {
         // 创建Httpclient对象
@@ -178,6 +138,13 @@ public class test {
 //        return map;
     }
 
+    public static void gettest() {
+        String s = "http://api.caonm.net/api/ai/o.php";
+        Map map = new HashMap();
+        map.put("msg", "你好");
+        String s1 = image.doGet(s, map);
+        System.out.println(s1);
+    }
 
     /**
      * 发送post 请求

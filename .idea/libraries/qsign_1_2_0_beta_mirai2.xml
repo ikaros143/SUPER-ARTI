@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="qsign-1.2.0-beta.mirai2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/libs/qsign-1.2.0-beta.mirai2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

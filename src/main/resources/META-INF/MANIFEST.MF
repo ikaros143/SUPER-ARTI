@@ -1,52 +1,59 @@
 Manifest-Version: 1.0
 Main-Class: org.example.Main
-Class-Path: accessors-smart-2.4.8.jar spring-boot-starter-web-3.0.0.jar 
- mirai-console-compiler-annotations-jvm-2.14.0.jar micrometer-observatio
- n-1.10.2.jar atomicfu-jvm-0.18.3.jar mockito-core-4.8.1.jar objenesis-3
- .2.jar jackson-databind-2.11.3.jar spring-boot-starter-tomcat-3.0.0.jar
-  mirai-core-jvm-2.14.0.jar snakeyaml-1.33.jar mirai-core-api-jvm-2.14.0
- .jar spring-boot-starter-json-3.0.0.jar hamcrest-2.2.jar assertj-core-3
- .23.1.jar webp-imageio-0.1.6.jar json-smart-2.4.8.jar asm-9.1.jar commo
- ns-codec-1.15.jar simboot-core-3.0.0-RC.2.jar netty-buffer-4.1.85.Final
- .jar simbot-logger-jvm-3.0.0-RC.2.jar kcore-0.6.3.jar junit-jupiter-par
- ams-5.9.1.jar httpcore-4.4.15.jar jackson-core-2.14.1.jar jackson-datat
- ype-jsr310-2.14.1.jar jakarta.annotation-api-2.1.1.jar log4j-to-slf4j-2
- .19.0.jar mockito-junit-jupiter-4.8.1.jar spring-boot-test-3.0.0.jar ko
- tlinx-serialization-protobuf-jvm-1.3.3.jar xmlunit-core-2.9.0.jar sprin
- g-boot-starter-logging-3.0.0.jar opentest4j-1.2.0.jar spring-data-commo
- ns-3.0.0.jar kotlin-stdlib-1.7.21.jar jakarta.activation-api-2.1.0.jar 
- spring-test-6.0.2.jar jackson-annotations-2.14.1.jar spring-boot-starte
- r-data-redis-3.0.4.jar spring-boot-3.0.0.jar di-api-0.0.3.jar kotlinx-s
- erialization-core-jvm-1.4.0.jar spring-tx-6.0.2.jar spring-boot-autocon
- figure-3.0.0.jar annotations-13.0.jar spring-jcl-6.0.2.jar kotlin-stdli
- b-jdk7-1.7.21.jar spring-data-redis-3.0.0.jar tomcat-embed-core-10.1.1.
- jar kotlinx-coroutines-jdk8-1.6.4.jar kotlin-stdlib-jdk8-1.7.21.jar jac
- kson-datatype-jdk8-2.14.1.jar spring-web-6.0.2.jar jakarta.xml.bind-api
- -4.0.0.jar apiguardian-api-1.1.2.jar di-core-0.0.3.jar fix-protocol-ver
- sion-1.3.0.mirai2.jar simboot-api-3.0.0-RC.2.jar netty-codec-4.1.85.Fin
- al.jar mirai-core-utils-jvm-2.14.0.jar simboot-core-spring-boot-starter
- -3.0.0-RC.2.jar tomcat-embed-el-10.1.1.jar junit-jupiter-api-5.9.1.jar 
- netty-common-4.1.85.Final.jar spring-aop-6.0.2.jar spring-expression-6.
- 0.2.jar simbot-component-mirai-core-3.0.0.0-M5.jar netty-handler-4.1.85
- .Final.jar netty-transport-native-unix-common-4.1.85.Final.jar micromet
- er-commons-1.10.2.jar junit-platform-commons-1.9.1.jar tomcat-embed-web
- socket-10.1.1.jar logback-classic-1.4.5.jar reactive-streams-1.0.4.jar 
- lettuce-core-6.2.1.RELEASE.jar simbot-api-3.0.0-RC.2.jar netty-resolver
- -4.1.85.Final.jar fastjson-1.2.71.jar kotlin-jvm-blocking-bridge-runtim
- e-jvm-2.1.0-170.1.jar android-json-0.0.20131108.vaadin1.jar junit-platf
- orm-engine-1.9.1.jar simbot-core-3.0.0-RC.2.jar spring-core-6.0.2.jar k
- otlin-reflect-1.7.21.jar kotlin-dynamic-delegation-jvm-0.3.0-170.1.jar 
- kotlinx-coroutines-core-jvm-1.6.4.jar spring-beans-6.0.2.jar bcprov-jdk
- 15on-1.64.jar jul-to-slf4j-2.0.4.jar spring-boot-starter-test-3.0.0.jar
-  spring-oxm-6.0.2.jar spring-webmvc-6.0.2.jar httpclient-4.5.13.jar sim
- boot-core-annotation-3.0.0-RC.2.jar spring-context-support-6.0.2.jar by
- te-buddy-1.12.19.jar jsonassert-1.5.1.jar slf4j-api-2.0.4.jar api-0.6.3
- .jar di-spring-0.0.3.jar logback-core-1.4.5.jar kotlin-stdlib-common-1.
- 7.21.jar reactor-core-3.5.0.jar spring-context-6.0.2.jar kotlinx-serial
- ization-json-jvm-1.4.0.jar spring-boot-test-autoconfigure-3.0.0.jar log
- 4j-api-2.19.0.jar byte-buddy-agent-1.12.19.jar spring-data-keyvalue-3.0
- .0.jar json-path-2.7.0.jar spring-boot-starter-3.0.0.jar junit-jupiter-
- 5.9.1.jar fix-protocol-version-1.3.0.mirai2.jar jackson-module-paramete
- r-names-2.14.1.jar lombok-1.18.24.jar junit-jupiter-engine-5.9.1.jar ja
- vax.inject-1.jar netty-transport-4.1.85.Final.jar
+Class-Path: spring-boot-starter-test-3.0.0.jar simbot-component-mirai-co
+ re-3.2.0.0.jar kotlin-dynamic-delegation-jvm-0.4.0-180.1.jar apiguardia
+ n-api-1.1.2.jar simboot-core-3.2.0.jar netty-transport-native-unix-comm
+ on-4.1.85.Final.jar kotlinx-serialization-json-jvm-1.5.1.jar lettuce-co
+ re-6.2.1.RELEASE.jar spring-boot-starter-3.0.0.jar javax.inject-1.jar m
+ irai-console-compiler-annotations-jvm-2.15.0.jar simbot-util-di-core-3.
+ 2.0.jar slf4j-api-2.0.4.jar kotlin-jvm-blocking-bridge-runtime-jvm-3.0.
+ 0-180.1.jar kotlin-stdlib-jdk8-1.7.21.jar kotlin-reflect-1.7.21.jar moc
+ kito-core-4.8.1.jar junit-jupiter-engine-5.9.1.jar objenesis-3.2.jar sn
+ akeyaml-1.33.jar junit-platform-engine-1.9.1.jar spring-boot-starter-lo
+ gging-3.0.0.jar jackson-databind-2.11.3.jar annotations-13.0.jar netty-
+ codec-socks-4.1.85.Final.jar spring-boot-starter-web-3.0.0.jar jackson-
+ datatype-jsr310-2.14.1.jar hamcrest-2.2.jar spring-boot-autoconfigure-3
+ .0.0.jar spring-core-6.0.2.jar spring-data-keyvalue-3.0.0.jar tomcat-em
+ bed-el-10.1.1.jar tomcat-embed-websocket-10.1.1.jar netty-resolver-4.1.
+ 85.Final.jar jackson-datatype-jdk8-2.14.1.jar spring-tx-6.0.2.jar commo
+ ns-codec-1.15.jar kotlin-stdlib-1.7.21.jar kotlinx-coroutines-jdk8-1.6.
+ 4.jar spring-boot-test-3.0.0.jar spring-context-support-6.0.2.jar opent
+ est4j-1.2.0.jar junit-jupiter-params-5.9.1.jar jackson-core-2.14.1.jar 
+ reactor-core-3.5.0.jar logback-core-1.4.5.jar bcprov-jdk15on-1.64.jar s
+ pring-webmvc-6.0.2.jar simbot-util-di-api-3.2.0.jar jakarta.annotation-
+ api-2.1.1.jar netty-transport-classes-kqueue-4.1.85.Final.jar simbot-an
+ notations-jvm-3.2.0.jar mockito-junit-jupiter-4.8.1.jar spring-oxm-6.0.
+ 2.jar spring-web-6.0.2.jar webp-imageio-0.1.6.jar asm-9.1.jar log4j-api
+ -2.19.0.jar accessors-smart-2.4.8.jar mirai-core-api-jvm-2.15.0.jar mir
+ ai-core-jvm-2.15.0.jar netty-handler-proxy-4.1.85.Final.jar async-http-
+ client-netty-utils-2.12.3.jar simbot-api-3.2.0.jar kotlin-stdlib-common
+ -1.7.21.jar byte-buddy-agent-1.12.19.jar kotlin-stdlib-jdk7-1.7.21.jar 
+ spring-boot-starter-data-redis-3.0.4.jar spring-boot-test-autoconfigure
+ -3.0.0.jar jakarta.xml.bind-api-4.0.0.jar netty-transport-4.1.85.Final.
+ jar simbot-util-annotation-tool-3.2.0.jar spring-beans-6.0.2.jar simboo
+ t-api-3.2.0.jar jackson-module-parameter-names-2.14.1.jar jackson-annot
+ ations-2.14.1.jar junit-platform-commons-1.9.1.jar spring-jcl-6.0.2.jar
+  spring-aop-6.0.2.jar spring-data-redis-3.0.0.jar reactive-streams-1.0.
+ 4.jar kotlinx-serialization-core-jvm-1.5.1.jar json-path-2.7.0.jar qsig
+ n-1.0.7.jar tomcat-embed-core-10.1.1.jar qsign-1.1.0-beta.mirai2.jar hu
+ tool-all-5.8.10.jar android-json-0.0.20131108.vaadin1.jar netty-handler
+ -4.1.85.Final.jar jul-to-slf4j-2.0.4.jar httpcore-4.4.15.jar netty-tran
+ sport-native-kqueue-4.1.85.Final-osx-x86_64.jar simbot-logger-jvm-3.2.0
+ .jar xmlunit-core-2.9.0.jar netty-transport-native-epoll-4.1.85.Final-l
+ inux-x86_64.jar kotlinx-coroutines-core-jvm-1.6.4.jar simbot-util-suspe
+ nd-transformer-jvm-3.2.0.jar mirai-core-utils-jvm-2.15.0.jar jakarta.ac
+ tivation-api-2.1.0.jar micrometer-commons-1.10.2.jar netty-reactive-str
+ eams-2.0.4.jar atomicfu-jvm-0.20.0.jar spring-boot-starter-tomcat-3.0.0
+ .jar spring-expression-6.0.2.jar json-smart-2.4.8.jar junit-jupiter-5.9
+ .1.jar spring-boot-3.0.0.jar simboot-core-spring-boot-starter-3.2.0.jar
+  logback-classic-1.4.5.jar netty-codec-http-4.1.85.Final.jar netty-tran
+ sport-classes-epoll-4.1.85.Final.jar spring-boot-starter-json-3.0.0.jar
+  spring-context-6.0.2.jar httpclient-4.5.13.jar simboot-core-annotation
+ -3.2.0.jar micrometer-observation-1.10.2.jar jakarta.activation-1.2.2.j
+ ar netty-common-4.1.85.Final.jar junit-jupiter-api-5.9.1.jar assertj-co
+ re-3.23.1.jar jsonassert-1.5.1.jar log4j-to-slf4j-2.19.0.jar byte-buddy
+ -1.12.19.jar spring-test-6.0.2.jar kotlinx-serialization-protobuf-jvm-1
+ .5.0.jar netty-codec-4.1.85.Final.jar async-http-client-2.12.3.jar nett
+ y-buffer-4.1.85.Final.jar lombok-1.18.24.jar spring-data-commons-3.0.0.
+ jar simbot-core-3.2.0.jar fastjson-1.2.71.jar
 

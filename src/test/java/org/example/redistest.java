@@ -1,10 +1,9 @@
 package org.example;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import io.lettuce.core.api.push.PushListener;
 import jakarta.servlet.http.HttpServletRequest;
-import org.example.dao.messages;
 import org.example.untils.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestComponent;
@@ -12,6 +11,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.PrintStream;
 import java.util.*;
 
 @TestComponent
@@ -63,8 +63,6 @@ public class redistest {
 //        JSONArray jsonArray = new JSONArray();
 //        jsonArray.add(map);
 //        System.out.println(jsonArray.toJSONString());
-        long timestamp = System.currentTimeMillis();
-        System.out.println(timestamp);
 
     }
 //https://sex.nyan.xyz/img-original/img/2023/01/18/02/59/25/104606654_p0.jpg
