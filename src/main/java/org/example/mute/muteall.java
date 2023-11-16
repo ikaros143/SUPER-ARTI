@@ -59,16 +59,17 @@ public class muteall {
         friend.sendBlocking("你也好");
     }
 
-    @Scheduled(cron = "0 30 11 ? * *")
+    @Scheduled(cron = "0 40 11 ? * *")
     public void goodafte() {
         BotManagers botManagers = application.getBotManagers();
         // 如果只有一种bot，也可以考虑使用 botManagers.get(0).all().get(0);
         // 这样的话注意处理异常情况
         Bot o = botManagers.get(0).all().get(0);
         Group group = o.getGroup(ID.$(740994565));
-        PathResource resource = Resource.of(Paths.get("/mcl/img/atri/cf.jpg"));
-        Image<?> resourceImage = Image.of(resource);
-        Messages messages = Messages.toMessages( Text.of("大家要记得按时吃饭哦~"), resourceImage);
+//        PathResource resource = Resource.of(Paths.get("/mcl/img/atri/cf.jpg"));
+//        Image<?> resourceImage = Image.of(resource);
+//        Messages messages = Messages.toMessages( Text.of("大家要记得按时吃饭哦~"), resourceImage);
+        Messages messages = Messages.toMessages( Text.of("大家要记得按时吃饭哦~"));
         group.sendBlocking(messages);
     }
     @Scheduled(cron = "0 30 7  * * ?")
@@ -76,7 +77,6 @@ public class muteall {
         BotManagers botManagers = application.getBotManagers();
         // 如果只有一种bot，也可以考虑使用 botManagers.get(0).all().get(0);
         // 这样的话注意处理异常情况
-        String s = "起床！不起床的都会被萝莉猫耳淫纹中等胸部情趣内衣扶她小魅魔上门榨精！起床！不起床的都会被萝莉猫耳淫纹中等胸部情趣内衣扶她小魅魔上门榨精！起床！不起床的都会被萝莉猫耳淫纹中等胸部情趣内衣扶她小魅魔上门榨精！起床！不起床的都会被萝莉猫耳淫纹中等胸部情趣内衣扶她小魅魔上门榨精！起床！";
         Bot o = botManagers.get(0).all().get(0);
         Group group = o.getGroup(ID.$(740994565));
         MessagesBuilder messagesBuilder = new MessagesBuilder();
@@ -88,11 +88,8 @@ public class muteall {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-//        Messages messages = Messages.toMessages( Text.of(s));
-//        group.sendAsync(messages);
-
     }
-    @Scheduled(cron = "0 59 23  * * ?")
+    @Scheduled(cron = "59 59 23  * * ?")
     public void goodMorning2() {
         BotManagers botManagers = application.getBotManagers();
         Bot o = botManagers.get(0).all().get(0);
@@ -141,32 +138,32 @@ public class muteall {
         }
     }
 
-    @Listener
-    @Filter(targets = @Filter.Targets(groups = {"740994565", "494050282"}))
-    public void gtp(GroupMessageEvent event) {
-        String plainText = event.getMessageContent().getPlainText();
-        if (plainText.contains("亚托莉 ")) {
-            String substring = plainText.substring(4);
-            System.out.println(substring);
-            String s = "http://api.caonm.net/api/ai/o.php";
-            Map map = new HashMap();
-            map.put("msg", substring);
-            String s1 = image.doGet(s, map);
-            if (s1.isEmpty()) {
-                event.replyBlocking("服务器波动或者未查询到，请重试或者换个问题喵~");
-                System.out.println(s1);
-            } else {
-
-                JSONObject jsonObject = JSON.parseObject(s1);
-                if (jsonObject == null) {
-                    event.replyBlocking("服务器波动或者未查询到，请重试或者换个问题喵~");
-                } else {
-                    String output = jsonObject.getString("Output").trim();
-                    MessageReceipt messageReceipt = event.replyBlocking(output);
-                }
-            }
-        }
-    }
+//    @Listener
+//    @Filter(targets = @Filter.Targets(groups = {"740994565", "494050282"}))
+//    public void gtp(GroupMessageEvent event) {
+//        String plainText = event.getMessageContent().getPlainText();
+//        if (plainText.contains("亚托莉 ")) {
+//            String substring = plainText.substring(4);
+//            System.out.println(substring);
+//            String s = "http://api.caonm.net/api/ai/o.php";
+//            Map map = new HashMap();
+//            map.put("msg", substring);
+//            String s1 = image.doGet(s, map);
+//            if (s1.isEmpty()) {
+//                event.replyBlocking("服务器波动或者未查询到，请重试或者换个问题喵~");
+//                System.out.println(s1);
+//            } else {
+//
+//                JSONObject jsonObject = JSON.parseObject(s1);
+//                if (jsonObject == null) {
+//                    event.replyBlocking("服务器波动或者未查询到，请重试或者换个问题喵~");
+//                } else {
+//                    String output = jsonObject.getString("Output").trim();
+//                    MessageReceipt messageReceipt = event.replyBlocking(output);
+//                }
+//            }
+//        }
+//    }
 
 //    @Listener
 //    @Filter("帮助")
@@ -196,11 +193,11 @@ public class muteall {
 //        event.getGroup().sendAsync(nudge);
 //    }
 
-//    @Listener//戳一戳会回复一个戳一戳
-//    public void nudge2(FriendMessageEvent event) {
-//        MiraiNudge nudge = new MiraiNudge(event.getId());
-//        event.getFriend().sendAsync(nudge);
-//    }
+    @Listener//戳一戳会回复一个戳一戳
+    public void nudge2(FriendMessageEvent event) {
+        MiraiNudge nudge = new MiraiNudge(event.getId());
+        event.getFriend().sendAsync(nudge);
+    }
 
 
 

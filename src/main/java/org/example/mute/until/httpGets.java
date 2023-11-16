@@ -63,21 +63,4 @@ public class httpGets {
         return originalUrl;
 
     }
-
-    public static void main(String[] args) {
-        try {
-            // 中文参数
-            String tag = "刻晴";
-
-            // 使用URLEncoder编码参数
-            String encodedTag = URLEncoder.encode(tag, "UTF-8");
-
-            // 构建GET请求的URL
-            String apiUrl = "https://api.lolicon.app/setu/v2?tag=" + encodedTag;
-
-            System.out.println("Encoded URL: " + apiUrl);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-    }
 }

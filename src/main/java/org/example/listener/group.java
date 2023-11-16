@@ -15,6 +15,8 @@ import net.mamoe.mirai.message.data.MessageSource;
 import org.springframework.stereotype.Component;
 
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -24,7 +26,7 @@ public class group {
     public void IncreaseEvent(GroupMemberIncreaseEvent event) {
         ID id = event.getAfter().getId();
         At at = new At(id);
-        System.out.println(event.getAfter().getId());
+//        System.out.println(event.getAfter().getId());
         Messages messages = Messages.toMessages(Text.of("欢迎加入银趴"), at);
         event.getGroup().sendAsync(messages);
     }
@@ -90,7 +92,7 @@ public class group {
 //        }
 //        return EventResult.truncate();
 //    }
-//
+
     @Listener
     @Filter(value = "撤回", targets = @Filter.Targets(atBot = true))
     @ContentTrim
@@ -106,7 +108,7 @@ public class group {
     }
 
     @Listener
-    @Filter("禁言他")
+    @Filter("禁言ta")
     @ContentTrim
     public void mute(GroupMessageEvent event){
         At firstOrNull = event.getMessageContent().getMessages().getFirstOrNull(At.Key);//获取艾特的那个人
@@ -120,4 +122,25 @@ public class group {
         member.muteAsync(10,TimeUnit.MINUTES);
         event.getGroup().sendAsync("了解!");
     }
+    @Listener
+    @Filter("解除禁言")
+    @ContentTrim
+    public void unmute(GroupMessageEvent event){
+        At firstOrNull = event.getMessageContent().getMessages().getFirstOrNull(At.Key);
+        ID id = firstOrNull.getTarget();
+        GroupMember member = event.getGroup().getMember(id);
+        member.unmuteBlocking();
+    }
+    @Listener
+    @Filter("踢他")
+    @ContentTrim
+   public void delGroup (GroupMessageEvent event){
+       At firstOrNull = event.getMessageContent().getMessages().getFirstOrNull(At.Key);
+       ID id = firstOrNull.getTarget();
+       GroupMember member = event.getGroup().getMember(id);
+        if (member instanceof DeleteSupport){
+            ((DeleteSupport) member).deleteBlocking();
+        }
+   }
+
 }

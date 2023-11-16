@@ -61,22 +61,26 @@ public class image {
             String urlstring = urlstring(plainText);
             String s = doGet(b + urlstring, null);//把链接和map参数发送请求
             JSONObject jsonObject = JSON.parseObject(s);
-            JSONArray honors = jsonObject.getJSONArray("data");
-            if (honors == null) {
-                event.getGroup().sendAsync("未查到喵~");
-            } else {
+            if (jsonObject.containsKey("data")) {
+                JSONArray honors = jsonObject.getJSONArray("data");
+                if (honors == null) {
+                    event.getGroup().sendAsync("未查到喵~");
+                }
+             else {
                 for (int i = 0; i < honors.size(); i++) {
                     JSONObject honor = (JSONObject) honors.get(i);
                     String aa = honor.getString("url");
                     String author = honor.getString("author");
+                    String page = honor.getString("page");
                     System.out.println(aa);
                     ResourceImage resourceImage = httpGet(aa, i);
                     event.replyBlocking(aa);
+                    event.getGroup().sendAsync(page);
                     Messages messages = Messages.toMessages(Text.of(author), resourceImage);
                     event.getGroup().sendAsync(messages);
-                    event.replyBlocking(aa);
+//                    System.out.println(s.split("img/")[1]);
                 }
-            }
+            }}
             break;
         }
         if (map.isEmpty()) {
@@ -251,7 +255,7 @@ public class image {
                 e.printStackTrace();
             }
         }
-        System.out.println("resultString2:" + resultString);
+//        System.out.println("resultString2:" + resultString);
         return resultString;
     }
 
