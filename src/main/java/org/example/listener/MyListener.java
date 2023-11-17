@@ -181,12 +181,10 @@ public class MyListener {
 
 
 
-    @Listener //好友自动通过
-    public void acc(RequestEvent event) {
-        event.acceptBlocking();
-
-
-    }
+//    @Listener //好友自动通过
+//    public void acc(RequestEvent event) {
+//        event.acceptBlocking();
+//    }
 
 
 }

@@ -12,11 +12,7 @@ import com.luciad.imageio.webp.WebPReadParam;
 
 public class until {
    //webq转为png
-    public static void main(String[] args) throws IOException {
-        String path="E:\\img\\op\\2.webp";
-        webpToPng(path, "E:\\img\\op\\3.png");
-        System.out.println("ok");
-    }
+
 
     public static void webpToPng(String webpPath, String pngPath) throws IOException {
         // Obtain a WebP ImageReader instance

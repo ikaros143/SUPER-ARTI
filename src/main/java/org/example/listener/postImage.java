@@ -41,7 +41,7 @@ public class postImage {
         String s = event.getMessageContent().getPlainText();//获取发送的信息
         if (s.contains("来张图")) {
             String substring = s.substring(4);
-            System.out.println("发送的消息" + substring);
+//            System.out.println("发送的消息" + substring);
             String data = getData(substring);
             String img = doPostJson("https://api.lolicon.app/setu/v2", data);
             JSONObject jsonObject = JSON.parseObject(img);
@@ -85,7 +85,6 @@ public class postImage {
 //               MessagesBuilder builder = new MessagesBuilder();
 //               Messages append = null;
 
-//https://sex.nyan.xyz/img-original/img /2023/05/21/00/00/57/108297869_p0.jpg
                 for (int i = 0; i < data1.size(); i++) {
                     StringBuilder sb = new StringBuilder();
                     JSONObject honor = (JSONObject) data1.get(i);
@@ -119,7 +118,7 @@ public class postImage {
                     list.add("1");
                     map.put(ss[0], list);
                 } else {
-                    list.add("1");
+                    list.add(ss[1]);
                     map.put(ss[0], list);
                 }
             } else if (ss[0].equals("uid")) {
