@@ -51,7 +51,7 @@ public class image {
     @Autowired
     private RedisService redisService;
 
-    @Listener   //模糊搜索图片
+    @Listener (priority = 400)  //模糊搜索图片
     @Filter(targets = @Filter.Targets(groups = {"740994565", "494050282"}, atBot = true))
     public synchronized EventResult group5(GroupMessageEvent event) {
         String plainText = event.getMessageContent().getPlainText();//获取群中发送的文本
