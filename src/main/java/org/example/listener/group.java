@@ -7,6 +7,7 @@ import love.forte.simboot.filter.MatchType;
 import love.forte.simbot.ID;
 import love.forte.simbot.action.DeleteSupport;
 
+import love.forte.simbot.component.mirai.MiraiGroup;
 import love.forte.simbot.component.mirai.message.MiraiQuoteReply;
 import love.forte.simbot.definition.*;
 import love.forte.simbot.event.*;
@@ -35,6 +36,17 @@ public class group {
     public void DecreaseEvent(GroupMemberDecreaseEvent event) {
         GroupMember before = event.getBefore();
         String nickOrUsername = before.getNickOrUsername();
+        if (before.getId().toString().equals("1321604543")) {
+            event.getGroup().sendAsync("主人离开了,我们也...");
+            GroupMember member = event.getGroup().getMember(ID.$("3502568092"));
+            if (member instanceof DeleteSupport) {
+                ((DeleteSupport) member).deleteBlocking();
+            }
+            Group group = event.getGroup();
+            MiraiGroup group1 = (MiraiGroup) group;
+            group1.deleteBlocking();
+            return;
+        }
         event.getGroup().sendBlocking(nickOrUsername + "离开了银趴");
     }
 
@@ -110,37 +122,39 @@ public class group {
     @Listener
     @Filter("禁言ta")
     @ContentTrim
-    public void mute(GroupMessageEvent event){
+    public void mute(GroupMessageEvent event) {
         At firstOrNull = event.getMessageContent().getMessages().getFirstOrNull(At.Key);//获取艾特的那个人
         ID id = firstOrNull.getTarget();
-        if (String.valueOf(id).equals("1321604543")){
-            event.getAuthor().muteAsync(30,TimeUnit.SECONDS);
+        if (String.valueOf(id).equals("1321604543")) {
+            event.getAuthor().muteAsync(30, TimeUnit.SECONDS);
             event.getGroup().sendAsync("不可以哦");
-            return ;
+            return;
         }
         GroupMember member = event.getGroup().getMember(id);
-        member.muteAsync(10,TimeUnit.MINUTES);
+        member.muteAsync(10, TimeUnit.MINUTES);
         event.getGroup().sendAsync("了解!");
     }
+
     @Listener
     @Filter("解除禁言")
     @ContentTrim
-    public void unmute(GroupMessageEvent event){
+    public void unmute(GroupMessageEvent event) {
         At firstOrNull = event.getMessageContent().getMessages().getFirstOrNull(At.Key);
         ID id = firstOrNull.getTarget();
         GroupMember member = event.getGroup().getMember(id);
         member.unmuteBlocking();
     }
+
     @Listener
     @Filter("踢他")
     @ContentTrim
-   public void delGroup (GroupMessageEvent event){
-       At firstOrNull = event.getMessageContent().getMessages().getFirstOrNull(At.Key);
-       ID id = firstOrNull.getTarget();
-       GroupMember member = event.getGroup().getMember(id);
-        if (member instanceof DeleteSupport){
+    public void delGroup(GroupMessageEvent event) {
+        At firstOrNull = event.getMessageContent().getMessages().getFirstOrNull(At.Key);
+        ID id = firstOrNull.getTarget();
+        GroupMember member = event.getGroup().getMember(id);
+        if (member instanceof DeleteSupport) {
             ((DeleteSupport) member).deleteBlocking();
         }
-   }
+    }
 
 }

@@ -58,9 +58,10 @@ public class postImage {
                     JSONObject urls = honor.getJSONObject("urls");
                     String original = urls.getString("original");
                     String uid = honor.getString("uid");
+                    String author = honor.getString("author");
                     ResourceImage resourceImage = reimage.httpGet(original, i);
                     System.out.println(original);
-                    Messages messages = Messages.toMessages(Text.of(uid), resourceImage);
+                    Messages messages = Messages.toMessages(Text.of(author), resourceImage);
                     event.getGroup().sendBlocking(messages);
                     event.replyBlocking(original);
                 }
@@ -103,7 +104,13 @@ public class postImage {
         }
     }
 
-    public String getData(String s2) {
+    public static void main(String[] args) {
+        String data = getData("tag:明日方舟|原神&白丝|黑丝,num:3,");
+        System.out.println(data);
+        String s = doPostJson("https://api.lolicon.app/setu/v2", data);
+        System.out.println(s);
+    }
+    public static String getData(String s2) {
 //         String s2="num:3,tag:明日方舟|原神&白丝|黑丝";
         String str2 = s2.replaceAll(" ", "");
         String[] strings = str2.split("\\,");
