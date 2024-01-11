@@ -157,4 +157,14 @@ public class group {
         }
     }
 
+    @Listener
+    @Filter(value = "踢我",targets = @Filter.Targets(atBot = true))
+    @ContentTrim
+    public void deljishn(GroupMessageEvent event) {
+        ID id = event.getAuthor().getId();
+        GroupMember member = event.getGroup().getMember(id);
+        if (member instanceof DeleteSupport) {
+            ((DeleteSupport) member).deleteBlocking();
+        }
+    }
 }
