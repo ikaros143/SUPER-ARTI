@@ -51,9 +51,9 @@ public class image {
     @Autowired
     private RedisService redisService;
 
-    @Listener (priority = 400)  //模糊搜索图片
+    @Listener(priority = 400)  //模糊搜索图片
     @Filter(targets = @Filter.Targets(groups = {"740994565", "494050282"}, atBot = true))
-    public synchronized EventResult group5(GroupMessageEvent event) {
+    public synchronized EventResult group5(GroupMessageEvent event) throws MalformedURLException {
         String plainText = event.getMessageContent().getPlainText();//获取群中发送的文本
         Map<String, String> map = map(plainText);//将文字转为map格式
         while (!map.isEmpty()) {
@@ -65,22 +65,20 @@ public class image {
                 JSONArray honors = jsonObject.getJSONArray("data");
                 if (honors == null) {
                     event.getGroup().sendAsync("未查到喵~");
+                } else {
+                    for (int i = 0; i < honors.size(); i++) {
+                        JSONObject honor = (JSONObject) honors.get(i);
+                        String aa = honor.getString("url");
+                        String author = honor.getString("author");
+                        String page = honor.getString("page");
+//                        ResourceImage resourceImage = httpGet(aa, i);
+                        event.getGroup().sendAsync(page);
+//                        Messages messages = Messages.toMessages(Text.of(author), resourceImage);
+                        Messages messages = Messages.toMessages(Text.of(author), Image.of(Resource.of(new URL(aa))));
+                        event.getGroup().sendAsync(messages);
+                    }
                 }
-             else {
-                for (int i = 0; i < honors.size(); i++) {
-                    JSONObject honor = (JSONObject) honors.get(i);
-                    String aa = honor.getString("url");
-                    String author = honor.getString("author");
-                    String page = honor.getString("page");
-                    System.out.println(aa);
-                    ResourceImage resourceImage = httpGet(aa, i);
-                    event.replyBlocking(aa);
-                    event.getGroup().sendAsync(page);
-                    Messages messages = Messages.toMessages(Text.of(author), resourceImage);
-                    event.getGroup().sendAsync(messages);
-//                    System.out.println(s.split("img/")[1]);
-                }
-            }}
+            }
             break;
         }
         if (map.isEmpty()) {
@@ -230,18 +228,13 @@ public class image {
                 }
             }
             URI uri = builder.build();
-
-//            System.out.println(uri);
-
             // 创建http GET请求
             HttpGet httpGet = new HttpGet(uri);
-
             // 执行请求
             response = httpClient.execute(httpGet);
             // 判断返回状态是否为200
             if (response.getStatusLine().getStatusCode() == 200) {
                 resultString = EntityUtils.toString(response.getEntity(), "UTF-8");
-//                System.out.println("resultString1:"+resultString);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -255,7 +248,6 @@ public class image {
                 e.printStackTrace();
             }
         }
-//        System.out.println("resultString2:" + resultString);
         return resultString;
     }
 
