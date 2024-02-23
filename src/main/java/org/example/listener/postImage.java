@@ -90,54 +90,43 @@ public class postImage {
     }
 
     public static String getData(String s2) {
-//         String s2="num:3,tag:明日方舟|原神&白丝|黑丝";
         String str2 = s2.replaceAll(" ", "");
-        String[] strings = str2.split(",");
+        String[] strings = str2.split("\\,");
         Map<String, List<String>> map = new HashMap<>();
-        // 循环加入map集合
+
         for (String string : strings) {
+            String[] keyValue = string.split(":");
+            String key = keyValue[0];
+            String value = keyValue[1];
             List<String> list = new ArrayList<>();
-            // 截取一组字符串
-            String[] ss = string.split(":");
-            switch (ss[0]) {
+
+            switch (key) {
                 case "num":
-                    if (Integer.parseInt((ss[1])) >= 5) {
-                        list.add("1");
-                        map.put(ss[0], list);
-                    } else {
-                        list.add(ss[1]);
-                        map.put(ss[0], list);
-                    }
+                    list.add(Integer.parseInt(value) >= 5 ? "1" : value);
                     break;
                 case "uid":
-                    list.add(ss[1]);
-                    map.put("uid", list);
-                    break;
                 case "r18":
-                    list.add(ss[1]);
-                    map.put("r18", list);
-                    break;
                 case "key":
-                    list.add(ss[1]);
-                    map.put("keyword", list);
+                    list.add(value);
                     break;
                 case "tag":
-                    String[] ss1 = string.split("&");
-                    for (int i = 0; i < ss1.length; i++) {
+                    String[] tagValues = value.split("&");
+                    for (int i = 0; i < tagValues.length; i++) {
                         if (i == 0) {
-                            String substring = ss1[i].substring(4);
-                            list.add(substring);
+                            list.add(tagValues[i].substring(4));
                         } else {
-                            list.add(ss1[i]);
+                            list.add(tagValues[i]);
                         }
                     }
-                    map.put(ss[0], list);
                     break;
             }
+            map.put(key.equals("tag") ? "tag" : key, list);
         }
-        return JSON.toJSONString(map);
-    }
 
+        String jsonStr = JSON.toJSONString(map);
+        System.out.println(jsonStr);
+        return jsonStr;
+    }
     /**
      * 发送post 请求
      *
